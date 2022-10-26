@@ -52,6 +52,8 @@
             $total = $num1 / $num2;
             echo "<h3> Total: $total </h3>";
             break;
+         default:
+        echo "<h3>Insira um valor válido!</h3>";
        }
     ?>
  </body>
