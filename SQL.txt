@@ -1,0 +1,110 @@
+Teste 1:
+
+SELECT nm_pessoa, cd_pessoa FROM pessoa 
+
+
+Teste 2: 
+
+select  pessoa.cd_pessoa, pessoa.nm_pessoa,pessoa_fisica.nr_cpf
+from pessoa
+join pessoa_fisica
+on pessoa.cd_pessoa = pessoa_fisica.cd_pessoa 
+order by pessoa.cd_pessoa
+
+Teste 3: 
+
+select  pessoa.cd_pessoa, pessoa.nm_pessoa,pessoa_juridica.nr_cnpj , pessoa_juridica.nm_fantasia 
+from pessoa
+join pessoa_juridica 
+on pessoa.cd_pessoa = pessoa_juridica.cd_pessoa 
+order by pessoa.cd_pessoa
+
+Teste 4:
+
+select  pessoa.cd_pessoa, pessoa.nm_pessoa, dt_cadastro
+from pessoa
+join cliente
+on pessoa.cd_pessoa = cliente.cd_pessoa 
+order by pessoa.cd_pessoa
+
+teste 5:
+
+select  pessoa.cd_pessoa, pessoa.nm_pessoa, cidade.nm_cidade, pessoa.nm_logradouro, pessoa.nm_bairro, pessoa.nr_endereco 
+from pessoa
+join cidade
+on pessoa.cd_pessoa = cidade.cd_cidade 
+order by pessoa.cd_pessoa
+
+teste 6:
+
+select  pessoa.cd_pessoa, pessoa.nm_pessoa, cliente.dt_cadastro, atividade.nm_atividade 
+from pessoa
+join atividade on atividade.cd_atividade  = pessoa.cd_pessoa  
+join cliente on cliente.cd_pessoa  = pessoa.cd_pessoa 
+where cliente.id_situacao > 0
+order by pessoa.cd_pessoa, pessoa.nm_pessoa
+
+Teste 7: 
+
+select  pedido.dt_pedido, pedido.cd_pedido, pessoa.cd_pessoa, pessoa.nm_pessoa
+from pessoa
+join pedido on pedido.cd_pessoa  = pessoa.cd_pessoa  
+where pedido.dt_cancelamento is null 
+order by pedido.dt_pedido, pedido.cd_pedido 
+
+teste 8:
+
+select pedido.cd_pedido, pedido.dt_pedido,
+produto.cd_produto, produto.nm_produto,
+unidade.cd_unidade, unidade.ds_unidade,
+pedido_produto.qt_faturada, pedido_produto.vl_total
+from pedido 
+join pedido_produto on cd_pedido_produto = pedido.cd_pedido
+join produto on produto.cd_produto = pedido_produto.cd_pedido_produto 
+join unidade on unidade.cd_unidade = produto.cd_produto 
+order by pedido.cd_pedido, pedido.cd_pedido 
+
+teste 9: select pedido.cd_pedido, pedido.dt_pedido,
+pessoa.cd_pessoa , pessoa.nm_pessoa,
+cliente.dt_cadastro , 
+atividade.nm_atividade 
+from pessoa 
+join pedido on pedido.cd_pedido  = pessoa.cd_pessoa 
+join cliente on cliente.cd_pessoa  = pedido.cd_pedido  
+join atividade on atividade.cd_atividade  = cliente.cd_atividade 
+where pedido.dt_cancelamento is null and cliente.id_situacao > 0
+order by pedido.dt_pedido, pedido.cd_pedido
+
+teste 10:
+
+select pedido_produto.cd_pedido , count(pedido_produto) 
+from produto 
+join pedido_produto on pedido_produto.cd_pedido = produto.cd_produto 
+group by pedido_produto.cd_pedido 
+order by count(pedido_produto)
+
+teste 11: 
+
+select pedido_produto.cd_pedido , sum(pedido_produto.vl_total) 
+from produto 
+join pedido_produto on pedido_produto.cd_pedido = produto.cd_produto 
+group by pedido_produto.cd_pedido 
+order by sum(pedido_produto.vl_total)  desc 
+
+teste 12: 
+
+select nota_fiscal.nr_nota_fiscal, nota_fiscal.dt_emissao 
+from nota_fiscal 
+where nota_fiscal.dt_emissao between '2022/05/01' and '2022/05/31' and nota_fiscal.dt_cancelado is null
+order by nota_fiscal.dt_emissao 
+
+teste 12: select nota_fiscal.nr_nota_fiscal, nota_fiscal.dt_emissao, 
+nota_fiscal_produto.cd_produto, nota_fiscal_produto.qt_produto, nota_fiscal_produto.vl_total ,
+produto.nm_produto,
+unidade.ds_unidade 
+from nota_fiscal
+join nota_fiscal_produto on nota_fiscal_produto.cd_nota_fiscal = nota_fiscal.cd_nota_fiscal
+join produto  on produto.cd_produto = nota_fiscal_produto.cd_produto 
+join unidade on unidade.cd_unidade = produto.cd_unidade_padrao
+where nota_fiscal.dt_emissao > '2022/06/01'
+order by nota_fiscal.nr_nota_fiscal, nota_fiscal.dt_emissao, produto.cd_produto 
