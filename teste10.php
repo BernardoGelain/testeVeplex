@@ -14,27 +14,86 @@
     <input type="submit" value="enviar">
     </form>
 
+
 <?php
 date_default_timezone_set('America/Sao_Paulo');
-$hoje = strtotime(date('d m Y h:i:s A'));
-
-$nascimento = strtotime($_POST['date']);
-
-/* converti as datas para string e depois entendi o que os valores significavam
-após isso, realizei alguns testes para me certificar que estava autorizando apenas pessoas maiores de idade
-levando em consideração a data do dia atual, dinâmicamente através da função date() 
-e considerando o fuso horario de sao paulo*/
+$h = date('Y-m-d');
+$nascimento = $_POST['date'];
 
 
-$idade = $nascimento - $hoje;
+$data_inicio = new DateTime("$h");
+$data_fim = new DateTime("$nascimento");
 
-if($idade > 1098759600){
-    echo "Você é menor de idade e não pode tirar a habilitação de motorista";
-} else {
-    echo "você é maior de idade e pode tirar sua habilitação de motorista";
+// Resgata diferença entre as datas
+$dateInterval = $data_inicio->diff($data_fim);
+
+$anos = $dateInterval->y;
+
+$dias = $dateInterval->days;
+
+
+function meses ($h,$nascimento){
+$data_inicio = new DateTime("$h");
+$data_fim = new DateTime("$nascimento");
+
+// Resgata diferença entre as datas
+$dateInterval = $data_inicio->diff($data_fim);
+
+$meses = $dateInterval->m;
+
+return $meses;
+
 }
 
-echo "<br<br>". $idade
+
+
+
+if($anos < 18 ){
+    echo "Você é menor de idade e não pode tirar a habilitação de motorista<br><br>";
+    $ano1 = date("Y");
+    $ano = $ano1 - 18;
+    
+    $mesDia = substr($h, 5 , 5);
+    $mesDiaAno = $ano."-".$mesDia;
+
+    $dataFinal = new DateTime("$mesDiaAno");
+  
+
+
+    
+function diasDatas($data_inicial,$data_final) {
+    $diferenca = strtotime($data_final) - strtotime($data_inicial);
+    $dias = floor($diferenca / (60 * 60 * 24)); 
+    return $dias;}
+
+   $tempo = diasDatas($mesDiaAno,$nascimento);
+ 
+   $diaHoje = substr($h, 8 , 2);
+   $diaNascimento = substr($nascimento, 8 , 2);
+
+function dia($diaHoje, $diaNascimento){
+    if (number_format($diaNascimento) >= number_format($diaHoje) ){
+        $dia = $diaNascimento - $diaHoje;
+    } elseif (number_format($diaHoje) > number_format($diaNascimento)) {
+        $dia = ($diaNascimento+ 30) - $diaHoje;
+    }
+    return $dia;}
+    $mesDiaAno = $ano."-".$mesDia;
+
+    $dataFinal = new DateTime("$mesDiaAno");
+ 
+    $anos = intdiv($tempo,365);
+    $meses = meses($mesDiaAno,$nascimento);
+    $diasRestantes = dia($diaHoje,$diaNascimento);
+ 
+ 
+    echo "<br>Faltam ".$diasRestantes . " dia(s) " . $meses. " mes(es)" . " e " . $anos ." ano(s) para voce poder tirar a habilitação";
+
+   } else {
+    echo "você é maior de idade e pode tirar sua habilitação de motorista<br><br>";
+}
+
+
 ?>
 </body>
 </html>
