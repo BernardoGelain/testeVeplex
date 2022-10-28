@@ -9,7 +9,7 @@
  <body>
     <br><br>
     <form method="GET">
-    <label> Informe os numeros que deseja fazer a media <b>separados por espaço</b>
+    <label> Informe os numeros que deseja fazer a media <b>separados por espaço</b>:
         <input type="text" id = "numero1" name="elementos">
     </label><br><br>
 
