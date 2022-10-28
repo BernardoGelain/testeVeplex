@@ -1,9 +1,9 @@
-Teste 1:
+--Teste 1:
 
 SELECT nm_pessoa, cd_pessoa FROM pessoa 
 
 
-Teste 2: 
+--Teste 2: 
 
 select  pessoa.cd_pessoa, pessoa.nm_pessoa,pessoa_fisica.nr_cpf
 from pessoa
@@ -11,7 +11,7 @@ join pessoa_fisica
 on pessoa.cd_pessoa = pessoa_fisica.cd_pessoa 
 order by pessoa.cd_pessoa
 
-Teste 3: 
+--Teste 3: 
 
 select  pessoa.cd_pessoa, pessoa.nm_pessoa,pessoa_juridica.nr_cnpj , pessoa_juridica.nm_fantasia 
 from pessoa
@@ -19,7 +19,7 @@ join pessoa_juridica
 on pessoa.cd_pessoa = pessoa_juridica.cd_pessoa 
 order by pessoa.cd_pessoa
 
-Teste 4:
+--Teste 4:
 
 select  pessoa.cd_pessoa, pessoa.nm_pessoa, dt_cadastro
 from pessoa
@@ -27,7 +27,7 @@ join cliente
 on pessoa.cd_pessoa = cliente.cd_pessoa 
 order by pessoa.cd_pessoa
 
-teste 5:
+--Teste 5:
 
 select  pessoa.cd_pessoa, pessoa.nm_pessoa, cidade.nm_cidade, pessoa.nm_logradouro, pessoa.nm_bairro, pessoa.nr_endereco 
 from pessoa
@@ -35,7 +35,7 @@ join cidade
 on pessoa.cd_pessoa = cidade.cd_cidade 
 order by pessoa.cd_pessoa
 
-teste 6:
+--Teste 6:
 
 select  pessoa.cd_pessoa, pessoa.nm_pessoa, cliente.dt_cadastro, atividade.nm_atividade 
 from pessoa
@@ -44,7 +44,7 @@ join cliente on cliente.cd_pessoa  = pessoa.cd_pessoa
 where cliente.id_situacao > 0
 order by pessoa.cd_pessoa, pessoa.nm_pessoa
 
-Teste 7: 
+--Teste 7: 
 
 select  pedido.dt_pedido, pedido.cd_pedido, pessoa.cd_pessoa, pessoa.nm_pessoa
 from pessoa
@@ -52,7 +52,7 @@ join pedido on pedido.cd_pessoa  = pessoa.cd_pessoa
 where pedido.dt_cancelamento is null 
 order by pedido.dt_pedido, pedido.cd_pedido 
 
-teste 8:
+--Teste 8:
 
 select pedido.cd_pedido, pedido.dt_pedido,
 produto.cd_produto, produto.nm_produto,
@@ -64,7 +64,9 @@ join produto on produto.cd_produto = pedido_produto.cd_pedido_produto
 join unidade on unidade.cd_unidade = produto.cd_produto 
 order by pedido.cd_pedido, pedido.cd_pedido 
 
-teste 9: select pedido.cd_pedido, pedido.dt_pedido,
+--Teste 9:
+
+select pedido.cd_pedido, pedido.dt_pedido,
 pessoa.cd_pessoa , pessoa.nm_pessoa,
 cliente.dt_cadastro , 
 atividade.nm_atividade 
@@ -75,7 +77,7 @@ join atividade on atividade.cd_atividade  = cliente.cd_atividade
 where pedido.dt_cancelamento is null and cliente.id_situacao > 0
 order by pedido.dt_pedido, pedido.cd_pedido
 
-teste 10:
+--Teste 10:
 
 select pedido_produto.cd_pedido , count(pedido_produto) 
 from produto 
@@ -83,7 +85,7 @@ join pedido_produto on pedido_produto.cd_pedido = produto.cd_produto
 group by pedido_produto.cd_pedido 
 order by count(pedido_produto)
 
-teste 11: 
+--Teste 11: 
 
 select pedido_produto.cd_pedido , sum(pedido_produto.vl_total) 
 from produto 
@@ -91,20 +93,54 @@ join pedido_produto on pedido_produto.cd_pedido = produto.cd_produto
 group by pedido_produto.cd_pedido 
 order by sum(pedido_produto.vl_total)  desc 
 
-teste 12: 
+--Teste 12: 
 
 select nota_fiscal.nr_nota_fiscal, nota_fiscal.dt_emissao 
 from nota_fiscal 
 where nota_fiscal.dt_emissao between '2022/05/01' and '2022/05/31' and nota_fiscal.dt_cancelado is null
 order by nota_fiscal.dt_emissao 
 
-teste 12: select nota_fiscal.nr_nota_fiscal, nota_fiscal.dt_emissao, 
-nota_fiscal_produto.cd_produto, nota_fiscal_produto.qt_produto, nota_fiscal_produto.vl_total ,
-produto.nm_produto,
-unidade.ds_unidade 
-from nota_fiscal
-join nota_fiscal_produto on nota_fiscal_produto.cd_nota_fiscal = nota_fiscal.cd_nota_fiscal
-join produto  on produto.cd_produto = nota_fiscal_produto.cd_produto 
-join unidade on unidade.cd_unidade = produto.cd_unidade_padrao
+--Teste 13:
+
+select nota_fiscal.nr_nota_fiscal , nota_fiscal.dt_emissao,
+nota_fiscal_produto.cd_produto, 
+produto.nm_produto, 
+unidade.cd_unidade, unidade.ds_unidade,
+nota_fiscal_produto.qt_produto, nota_fiscal_produto.vl_total 
+from  nota_fiscal 
+join nota_fiscal_produto  on nota_fiscal_produto.cd_nota_fiscal = nota_fiscal.cd_nota_fiscal 
+join produto on produto.cd_produto = nota_fiscal_produto.cd_produto 
+join unidade on unidade.cd_unidade = produto.cd_unidade_padrao 
 where nota_fiscal.dt_emissao > '2022/06/01'
-order by nota_fiscal.nr_nota_fiscal, nota_fiscal.dt_emissao, produto.cd_produto 
+order by nota_fiscal.nr_nota_fiscal, nota_fiscal.dt_emissao, produto.cd_produto
+
+--TESTE 14:
+select nota_fiscal.nr_nota_fiscal, nota_fiscal.dt_emissao, nota_fiscal_produto.cd_produto
+from nota_fiscal 
+join nota_fiscal_produto on nota_fiscal_produto.cd_nota_fiscal = nota_fiscal.cd_nota_fiscal 
+where nota_fiscal_produto.cd_produto = 11806 and nota_fiscal.dt_emissao > '2022/06/01'
+
+
+--TESTE 15:
+
+--COM SUBSELECT
+
+select tabela_salarial.cd_tabela, tabela_salarial.nm_tabela, tabela_salarial_valor.vl_salario, tabela_salarial_valor.dt_base 
+from tabela_salarial
+join tabela_salarial_valor on tabela_salarial_valor.cd_tabela = tabela_salarial.cd_tabela 
+where tabela_salarial_valor.vl_salario  
+in (
+select tabela_salarial_valor.vl_salario 
+where tabela_salarial_valor.dt_base < current_timestamp 
+)
+order by tabela_salarial_valor.dt_base desc
+FETCH FIRST 1 ROWS ONLY
+
+--SEM SUBSELECT RETORNANDO O MESMO VALOR E MAIS ENXUTO
+
+select tabela_salarial.cd_tabela, tabela_salarial.nm_tabela, tabela_salarial_valor.vl_salario, tabela_salarial_valor.dt_base 
+from tabela_salarial
+join tabela_salarial_valor on tabela_salarial_valor.cd_tabela = tabela_salarial.cd_tabela 
+where tabela_salarial_valor.dt_base < '2022/10/28'
+order by tabela_salarial_valor.dt_base  desc
+FETCH FIRST 1 ROWS ONLY
