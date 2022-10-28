@@ -25,7 +25,7 @@
         $lista = explode(" ",$elementos);
 
         $media = array_sum($lista) / count($lista) ;
-        $soma = array_sum($lista) + count($lista) ;  
+        $soma = array_sum($lista);  
 
         $elementos = count($lista);
         echo "A <b>média</b> dos algarismos é de: ".$media;
