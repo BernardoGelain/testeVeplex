@@ -3,48 +3,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery.min.js"></script>
     <title>Document</title>
  </head>
  <body>
     <br><br>
-    <form method="POST">
-    <label> Insira um valor
-        <input type="number" id = "numero1" name="numero1">
+    <form method="GET">
+    <label> Informe os numeros que deseja fazer a media separados por espaço
+        <input type="text" id = "numero1" name="elementos">
     </label><br><br>
-    <label> Insira um valor
-        <input type="number" id = "numero2" name="numero2">
-    </label><br><br>
-    <label> Insira um valor
-        <input type="number" id = "numero3" name="numero3">
-    </label><br><br>
-    <label> Insira um valor
-        <input type="number" id = "numero4" name="numero4">
-    </label><br><br>
-    <label> Insira um valor
-        <input type="number" id = "numero5" name="numero5">
-    </label>
-    <br><br>
+
+
+    <input type="submit" id = id value="enviar" name = "button">
     
-    <input type="submit" value="enviar">
+
     </form>
-    <?php
-    $numero1 = $_POST['numero1'];
-    $numero2 = $_POST['numero2'];
-    $numero3 = $_POST['numero3'];
-    $numero4 = $_POST['numero4'];
-    $numero5 = $_POST['numero5'];
-    $soma = $numero1 + $numero2 + $numero3 + $numero4 + $numero5;
-    $media = ($numero1 + $numero2 + $numero3 + $numero4 + $numero5)/5;
-    $conjunto = array($numero1,$numero2,$numero3,$numero4,$numero5);
-    sort($conjunto);
-    $maior = $conjunto[4];
-    $menor = $conjunto[0];
+    <form method="GET" id="teste">
+        <?php
+        $lista = [];
+        $elementos = $_GET['elementos'];
+        $lista = explode(" ",$elementos);
 
-    echo "O menor número é: ". $menor. "<br>";  
-    echo "O maior número é: ". $maior . "<br>";
-    echo "a soma dos números é: " . $soma . "<br>"; 
-    echo "A média dos números é: " . $media . "<br>";
+        $media = array_sum($lista) / count($lista) ;
+        $soma = array_sum($lista) + count($lista) ;  
 
-    ?>
+        $elementos = count($lista);
+        echo "A <b>média</b> dos algarismos é de: ".$media;
+        echo "<br><br> A <b>soma</b> dos algarismos informados é de: " . $soma;
+        echo "<br><br> Você informou : " . $elementos ." elementos para realizar os calculos";
+
+?>
+                
+    </form>
     </body>
  </html>
