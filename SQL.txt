@@ -123,24 +123,16 @@ where nota_fiscal_produto.cd_produto = 11806 and nota_fiscal.dt_emissao > '2022/
 
 --TESTE 15:
 
---COM SUBSELECT
 
-select tabela_salarial.cd_tabela, tabela_salarial.nm_tabela, tabela_salarial_valor.vl_salario, tabela_salarial_valor.dt_base 
-from tabela_salarial
-join tabela_salarial_valor on tabela_salarial_valor.cd_tabela = tabela_salarial.cd_tabela 
-where tabela_salarial_valor.vl_salario  
-in (
-select tabela_salarial_valor.vl_salario 
-where tabela_salarial_valor.dt_base < current_timestamp 
+
+select ts.nm_tabela, ts.cd_tabela, tsv.dt_base, tsv.vl_salario 
+from tabela_salarial as ts
+join tabela_salarial_valor as tsv on tsv.cd_tabela = ts.cd_tabela 
+where tsv.dt_base  = 
+	(select tsv2.dt_base
+	from tabela_salarial_valor tsv2
+	where tsv2.cd_tabela = ts.cd_tabela
+	and tsv2.dt_base <= current_date 
+	order by tsv2.dt_base desc limit 1
 )
-order by tabela_salarial_valor.dt_base desc
-FETCH FIRST 1 ROWS ONLY
 
---SEM SUBSELECT RETORNANDO O MESMO VALOR E MAIS ENXUTO
-
-select tabela_salarial.cd_tabela, tabela_salarial.nm_tabela, tabela_salarial_valor.vl_salario, tabela_salarial_valor.dt_base 
-from tabela_salarial
-join tabela_salarial_valor on tabela_salarial_valor.cd_tabela = tabela_salarial.cd_tabela 
-where tabela_salarial_valor.dt_base < '2022/10/28'
-order by tabela_salarial_valor.dt_base  desc
-FETCH FIRST 1 ROWS ONLY
