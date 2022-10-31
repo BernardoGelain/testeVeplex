@@ -124,15 +124,15 @@ where nota_fiscal_produto.cd_produto = 11806 and nota_fiscal.dt_emissao > '2022/
 --TESTE 15:
 
 
-
 select ts.nm_tabela, ts.cd_tabela, tsv.dt_base, tsv.vl_salario 
 from tabela_salarial as ts
 join tabela_salarial_valor as tsv on tsv.cd_tabela = ts.cd_tabela 
 where tsv.dt_base  = 
-	(select tsv2.dt_base
+	(select max(tsv2.dt_base)
 	from tabela_salarial_valor tsv2
-	where tsv2.cd_tabela = ts.cd_tabela
-	and tsv2.dt_base <= current_date 
-	order by tsv2.dt_base desc limit 1
+	where tsv2.cd_tabela = ts.cd_tabela 
+	group by ts.cd_tabela 
+ 
 )
+
 
